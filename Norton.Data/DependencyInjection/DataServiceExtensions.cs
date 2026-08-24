@@ -13,12 +13,6 @@ namespace Norton.Data.DependencyInjection
         {
             services.AddScoped<IBookRepository, BookRepository>();
 
-            // Obviously the in memory database is for testing only, and a proper abstracted connection string would be used here.
-            services.AddDbContext<NortonDbContext>(options =>
-            {
-                options.UseInMemoryDatabase("NortonTechTest");
-            });
-
             return services;
         }
     }

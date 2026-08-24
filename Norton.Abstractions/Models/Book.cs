@@ -1,4 +1,4 @@
-﻿namespace Norton.Abstractions
+﻿namespace Norton.Abstractions.Models
 {
     public class Book
     {

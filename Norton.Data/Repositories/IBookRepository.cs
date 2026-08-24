@@ -14,7 +14,7 @@ namespace Norton.Data.Repositories
         // values of book were nullable and some could be removed from the front end and populated via the server.
         Book AddBook(Book book);
         // Same comment as above, if some values of the book are not changable, change this to a model without those values.
-        Book UpdateBook(Book book); 
+        Book UpdateBook(UpdateBook book); 
         void DeleteBook(int id);
     }
 }
