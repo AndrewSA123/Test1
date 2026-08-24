@@ -1,4 +1,4 @@
-﻿using Norton.Abstractions;
+﻿using Norton.Abstractions.Models;
 using Norton.Data.Models;
 using System;
 using System.Collections.Generic;
