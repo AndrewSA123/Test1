@@ -45,7 +45,7 @@ namespace Norton.Data.Repositories
 
         public void DeleteBook(int id)
         {
-            var query = "DELETE FROM sbo.Book where Id = @Id";
+            var query = "DELETE FROM dbo.Book where Id = @Id";
 
             var connection = new SqlConnection(connectionString);
 
@@ -57,6 +57,10 @@ namespace Norton.Data.Repositories
                 // connection.Open();
                 // command.ExecuteNonQuery();
             }
+
+            //Simulate
+            var book = books.Find(x => x.Id == id);
+            books.Remove(book);
         }
 
         public Book GetBookById(int id)

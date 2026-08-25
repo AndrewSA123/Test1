@@ -33,11 +33,6 @@ namespace Norton_Tech_Test.Controllers
         [HttpPost]
         public IActionResult Create(Book book)
         {
-            if (!ModelState.IsValid)
-            {
-                return PartialView("_BookFormModal", book);
-            }
-
             service.AddBook(book);
 
             return RedirectToAction("Index");
@@ -46,13 +41,15 @@ namespace Norton_Tech_Test.Controllers
         [HttpPost]
         public IActionResult Update(Book book)
         {
-            if (!ModelState.IsValid)
-            {
-                return PartialView("_BookFormModal", book);
-            }
-
             service.UpdateBook(mapper.Map<UpdateBook>(book));
 
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            service.DeleteBook(id);
             return RedirectToAction("Index");
         }
     }

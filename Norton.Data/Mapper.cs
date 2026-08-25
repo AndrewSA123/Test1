@@ -13,6 +13,7 @@ namespace Norton.Data
         {
             CreateMap<BookEdm, Book>().ReverseMap();
             CreateMap<BookEdm, UpdateBook>().ReverseMap();
+            CreateMap<Book, UpdateBook>().ReverseMap();
         }
     }
 }

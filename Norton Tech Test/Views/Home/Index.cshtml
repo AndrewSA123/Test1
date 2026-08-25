@@ -10,7 +10,7 @@
     <h1 class="display-4">Book List</h1>
     <button type="button" class="btn btn-success mb-3"
             data-bs-toggle="modal" data-bs-target="#bookModal"
-            data-id="" data-title="" data-author="" data-genre="" data-price="" data-publisheddate="@DateTime.Now.ToString("dd-MM-yyyy")">
+            data-id="" data-title="" data-author="" data-genre="" data-price="" data-publisheddate="@DateTime.Now.ToString("yyyy-MM-dd")">
         Create Book
     </button>
     <table class="table tbale-striped table-hover">
@@ -40,9 +40,12 @@
                                 data-author="@book.Author"
                                 data-genre="@book.Genre"
                                 data-price="@book.Price"
-                                data-publisheddate="@book.PublishedDate.ToString("dd-MM-yyyy")">
+                                data-publisheddate="@book.PublishedDate.ToString("yyyy-MM-dd")">
                             Edit
                         </button>
+                        <form asp-action="Delete" asp-route-id="@book.Id" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
                     </td>
                 </tr>
             }
@@ -76,7 +79,7 @@
             const form = document.getElementById('bookForm');
             const isEdit = data.id;
 
-            form.action = isEdit ? '/Home/Edit' : '/Home/Create';
+            form.action = isEdit ? '/Home/Update' : '/Home/Create';
             document.getElementById('bookModalLabel').textContent = isEdit ? 'Edit Book' : 'Create Book';
 
             document.getElementById('Id').value = data.id ?? '';
