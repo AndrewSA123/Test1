@@ -1,7 +1,19 @@
+using Norton.Data.DependencyInjection;
+using Norton.Services;
+using Norton_Tech_Test.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var services = builder.Services;
+
+// Adding in the service to DI so the book controller has access
+services.AddScoped<IBookService, BookService>();
+
+// Calling the DI from the data project to bring in the repos and the automapper.
+services.AddData(builder.Configuration);
 
 var app = builder.Build();
 

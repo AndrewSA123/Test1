@@ -1,5 +1,7 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using AutoMapper;
+using Microsoft.Data.SqlClient;
 using Norton.Abstractions.Models;
+using Norton.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,8 +10,15 @@ using System.Text;
 
 namespace Norton.Data.Repositories
 {
-    public class BookRepository(string connectionString) : IBookRepository
+    public class BookRepository(string connectionString, IMapper mapper) : IBookRepository
     {
+        private static List<BookEdm> books = new List<BookEdm>()
+        {
+            new() { Id = 1, Title = "Title 1", Author = "Author 1", Genre = "Fiction", Price = 9.99m, PublishedDate = DateTimeOffset.UtcNow },
+            new() { Id = 2, Title = "Title 2", Author = "Author 2", Genre = "Sci-Fi", Price = 432, PublishedDate = DateTimeOffset.UtcNow.AddDays(-2) },
+            new() { Id = 3, Title = "Title 3", Author = "Author 3", Genre = "Romanticy", Price = 2, PublishedDate = DateTimeOffset.UtcNow.AddDays(5) }
+        };
+
         public Book AddBook(Book book)
         {
             var query = "INSERT INTO dbo.Book (Title, Author, PublishedDate, Genre, Price)" +
@@ -28,6 +37,9 @@ namespace Norton.Data.Repositories
             }
 
             // only here to simulate insertion
+            var edm = mapper.Map<BookEdm>(book);
+            edm.Id = books.OrderByDescending(x => x.Id).First().Id + 1;
+            books.Add(edm);
             return book;
         }
 
@@ -70,7 +82,7 @@ namespace Norton.Data.Repositories
 
             // return newBook;
 
-            return new Book { Title = "Sample Title", Author = "Sample Author", Genre = "Fiction", Price = 9.99m, PublishedDate = DateTimeOffset.UtcNow };
+            return mapper.Map<Book>(books.Find(x => x.Id == id));
         }
 
         public IList<Book> GetBooks()
@@ -91,12 +103,7 @@ namespace Norton.Data.Repositories
             // }
             // return books;
 
-            return new List<Book>
-            {
-                new() { Title = "Title 1", Author = "Author 1", Genre = "Fiction", Price = 9.99m, PublishedDate = DateTimeOffset.UtcNow },
-                new() { Title = "Title 2", Author = "Author 2", Genre = "Sci-Fi", Price = 432, PublishedDate = DateTimeOffset.UtcNow.AddDays(-2) },
-                new() { Title = "Title 3", Author = "Author 3", Genre = "Romanticy", Price = 2, PublishedDate = DateTimeOffset.UtcNow.AddDays(5) }
-            };
+            return mapper.Map<IList<Book>>(books);
         }
 
         public Book UpdateBook(UpdateBook book)
@@ -116,6 +123,7 @@ namespace Norton.Data.Repositories
             }
 
             // only here to simulate update
+            mapper.Map(book, books.Find(x => x.Id == book.Id));
             return book;
         }
 

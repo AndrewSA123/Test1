@@ -1,9 +1,7 @@
-﻿using Norton.Abstractions.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using Norton.Abstractions.Models;
 
-namespace Norton.Abstractions.Services
+namespace Norton.Services
 {
     public interface IBookService
     {
@@ -13,7 +11,7 @@ namespace Norton.Abstractions.Services
 
         Book AddBook(Book book);
 
-        Book UpdateBook(Book book);
+        Book UpdateBook(UpdateBook book);
 
         void DeleteBook(int id);
     }

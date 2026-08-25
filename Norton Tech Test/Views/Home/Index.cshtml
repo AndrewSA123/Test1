@@ -1,8 +1,90 @@
-﻿@{
+﻿@using Norton.Abstractions.Models
+@model IList<Norton.Abstractions.Models.Book>
+
+@{
     ViewData["Title"] = "Home Page";
+
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Book List</h1>
+    <button type="button" class="btn btn-success mb-3"
+            data-bs-toggle="modal" data-bs-target="#bookModal"
+            data-id="" data-title="" data-author="" data-genre="" data-price="" data-publisheddate="@DateTime.Now.ToString("dd-MM-yyyy")">
+        Create Book
+    </button>
+    <table class="table tbale-striped table-hover">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Price</th>
+                <th>Published On</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Genre</td>
+                    <td class="text-end">@book.Price.ToString("C")</td>
+                    <td>@book.PublishedDate</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-primary"
+                                data-bs-toggle="modal" data-bs-target="#bookModal"
+                                data-id="@book.Id"
+                                data-title="@book.Title"
+                                data-author="@book.Author"
+                                data-genre="@book.Genre"
+                                data-price="@book.Price"
+                                data-publisheddate="@book.PublishedDate.ToString("dd-MM-yyyy")">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+
+<div class="modal fade" id="bookModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookModalLabel">Create Book</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <partial name="_BookFormModal" model="new Book()" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Please forgive all of this, this is a terrible way of bolting on the edit/create modal
+        // My MVC/Razor pages knowledge is a little rusty as I have been using React for years and before that Blazor.
+        // Working with a current codebase would refresh my memory.
+        document.getElementById('bookModal').addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const data = button.dataset;
+
+            const form = document.getElementById('bookForm');
+            const isEdit = data.id;
+
+            form.action = isEdit ? '/Home/Edit' : '/Home/Create';
+            document.getElementById('bookModalLabel').textContent = isEdit ? 'Edit Book' : 'Create Book';
+
+            document.getElementById('Id').value = data.id ?? '';
+            document.getElementById('Title').value = data.title ?? '';
+            document.getElementById('Author').value = data.author ?? '';
+            document.getElementById('Genre').value = data.genre ?? '';
+            document.getElementById('Price').value = data.price ?? '';
+            document.getElementById('PublishedDate').value = data.publisheddate ?? '';
+        });
+    </script>
+}

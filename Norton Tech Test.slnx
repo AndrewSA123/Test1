@@ -1,3 +1,9 @@
 <Solution>
   <Project Path="Norton Tech Test/Norton Tech Test.csproj" />
+  <Project Path="Norton.Abstractions/Norton.Abstractions.csproj" />
+  <Project Path="Norton.Data/Norton.Data.csproj" />
+  <Project Path="Norton.Database/Norton.Database.sqlproj">
+    <Build />
+    <Deploy />
+  </Project>
 </Solution>

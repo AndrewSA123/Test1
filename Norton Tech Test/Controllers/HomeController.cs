@@ -1,25 +1,59 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Norton.Abstractions.Models;
+using Norton.Services;
 using Norton_Tech_Test.Models;
 using System.Diagnostics;
 
 namespace Norton_Tech_Test.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(IBookService service, IMapper mapper) : Controller
     {
         public IActionResult Index()
         {
-            return View();
+            var books = service.GetBooks();
+            return View(books);
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult CreateForm()
         {
-            return View();
+            // Should probably have a ViewModel for this rather than using book, "CreateBook" or have a combined "CreateUpdateBook".
+            return PartialView("_BookFormModal", new Book());
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpGet]
+        public IActionResult EditForm(int id)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var book = service.GetBookById(id);
+
+            return PartialView("_BookFormModal", book);
+        }
+
+        [HttpPost]
+        public IActionResult Create(Book book)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_BookFormModal", book);
+            }
+
+            service.AddBook(book);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Update(Book book)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_BookFormModal", book);
+            }
+
+            service.UpdateBook(mapper.Map<UpdateBook>(book));
+
+            return RedirectToAction("Index");
         }
     }
 }
